@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "tree.h"
-
 int main(int argc, char const * argv[])
 {
     if (argc < 2) {

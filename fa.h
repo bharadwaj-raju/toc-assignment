@@ -5,15 +5,21 @@
 #ifndef FA_H
 #define FA_H
 
-#include "tree.h"
+#include "set.h"
 
 typedef struct fa
 {
-    char initial[TREE_KEY_MAX_LEN];
-    tree_node_t * accepted;
-    tree_node_t * transitions;
-    tree_node_t * lambda_transitions;
+    char initial[KEY_LEN];
+    set_t * accepted;
+    set_t * transitions;
+    set_t * lambda_transitions;
 } fa_t;
+
+typedef struct fa_transition
+{
+    char letter;
+    char next[KEY_LEN];
+} fa_transition_t;
 
 char * single_char_str(char c)
 {
@@ -25,21 +31,23 @@ char * single_char_str(char c)
 
 void fa_add_transition(fa_t * fa, const char * state1, char c, const char * state2)
 {
-    tree_node_t * map_node = tree_find(fa->transitions, state1);
-    if (!map_node) {
-        map_node = tree_node_create(state1, NULL);
-        tree_insert(&fa->transitions, tree_node_create(state1, NULL));
+    set_t * transitions = set_find(fa->transitions, state1);
+    if (!transitions) {
+        transitions = set_init();
+        set_add(fa->transitions, state1, transitions);
     }
-    char * state2_copy = (char *)malloc(sizeof(char) * TREE_KEY_MAX_LEN);
-    strncpy(state2_copy, state2, TREE_KEY_MAX_LEN);
-    tree_insert((tree_node_t **)(&map_node->data), tree_node_create(single_char_str(c), state2_copy));
+    char * c_str = single_char_str(c);
+    set_t * char_transitions = set_find(transitions, c_str);
+    if (!char_transitions) {
+        char_transitions = set_init();
+        set_add(transitions, c_str, char_transitions);
+    }
+    set_add(char_transitions, state2, &PRESENT);
 }
 
 void fa_add_lambda_transition(fa_t * fa, const char * state1, const char * state2)
 {
-    char * state2_copy = (char *)malloc(sizeof(char) * TREE_KEY_MAX_LEN);
-    strncpy(state2_copy, state2, TREE_KEY_MAX_LEN);
-    tree_insert(&fa->lambda_transitions, tree_node_create(state1, state2_copy));
+    set_add(fa->lambda_transitions, state2, &PRESENT);
 }
 
 #endif
