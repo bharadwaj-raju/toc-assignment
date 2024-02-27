@@ -1,0 +1,1 @@
+CFLAGS=-Wall -Wextra -Werror -ggdb3 -lm
