@@ -1,0 +1,10 @@
+-> ee
+ee (a) -> oe
+ee (b) -> eo
+oe (a) -> ee
+oe (b) -> oo
+eo (a) -> oo
+eo (b) -> ee
+oo (a) -> eo
+oo (b) -> oe
+A = [ee oo]

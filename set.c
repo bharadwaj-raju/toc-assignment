@@ -1,7 +1,11 @@
-#include <memory.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "set.h"
+
+int PRESENT = 123;
 
 set_t * set_init_with_capacity(int capacity)
 {
@@ -17,9 +21,18 @@ set_t * set_init()
     return set_init_with_capacity(SET_DEFAULT_CAPACITY);
 }
 
+void set_print(set_t * arr)
+{
+    printf("{ ");
+    for (size_t i = 0; i < arr->len; i++) {
+        printf("%s ", arr->data[i].key);
+    }
+    printf("}\n");
+}
+
 void set_resize(set_t * arr, int capacity)
 {
-    void ** new_data = malloc(sizeof(set_entry_t) * capacity);
+    set_entry_t * new_data = malloc(sizeof(set_entry_t) * capacity);
     memcpy(new_data, arr->data, sizeof(set_entry_t) * arr->len);
     free(arr->data);
     arr->data = new_data;
@@ -83,7 +96,7 @@ set_t * set_union(set_t * s1, set_t * s2)
     return res;
 }
 
-void * set_union_inplace(set_t * this, set_t * other)
+void set_union_inplace(set_t * this, set_t * other)
 {
     for (size_t i = 0; i < other->len; i++) {
         if (set_find(this, other->data[i].key) == NULL) {

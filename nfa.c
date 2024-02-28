@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -31,12 +32,12 @@ set_t * nfa_run(fa_t * nfa, const char * input)
         next_states = set_init();
     }
 
-    return next_states;
+    return reachable_states;
 }
 
 void extend_by_lambda_closure(fa_t * nfa, set_t * states)
 {
-    int done = 0;
+    unsigned int done = 0;
     while (done < states->len) {
         for (size_t i = done; i < states->len; i++) {
             char * state = states->data[i].key;

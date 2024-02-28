@@ -1,7 +1,9 @@
-#ifndef SET_H
-#define SET_H
+#ifndef FA_H
+#define FA_H
 
 #include "set.h"
+
+extern int PRESENT;
 
 typedef struct fa
 {
