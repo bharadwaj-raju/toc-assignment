@@ -57,6 +57,9 @@ int main(int argc, char const * argv[])
         set_clear(accepted_intersection);
         free(accepted_intersection);
         printf("\taccepted: %s\n", nfa_accepted ? "yes" : "no");
+        set_clear(nfa_state);
+        free(nfa_state);
+
         printf("dfa:\n");
         char * dfa_state = dfa_run(dfa, input);
         bool dfa_accepted = set_find(dfa->accepted, dfa_state) != NULL;
