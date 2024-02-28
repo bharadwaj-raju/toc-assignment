@@ -30,6 +30,19 @@ void set_print(set_t * arr)
     printf("}\n");
 }
 
+bool set_equal(set_t * s1, set_t * s2)
+{
+    if (s1->len != s2->len) {
+        return false;
+    }
+    for (size_t i = 0; i < s1->len; i++) {
+        if (set_find(s2, s1->data[i].key) == NULL) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void set_resize(set_t * arr, int capacity)
 {
     set_entry_t * new_data = malloc(sizeof(set_entry_t) * capacity);
@@ -53,11 +66,28 @@ void set_add(set_t * arr, const char * key, void * data)
     arr->len++;
 }
 
+void set_add_uniq(set_t * arr, const char * key, void * data)
+{
+    if (set_find(arr, key) == NULL) {
+        set_add(arr, key, data);
+    }
+}
+
 void * set_find(set_t * arr, const char * key)
 {
     for (size_t i = 0; i < arr->len; i++) {
         if (strncmp(arr->data[i].key, key, KEY_LEN) == 0) {
             return arr->data[i].data;
+        }
+    }
+    return NULL;
+}
+
+char * set_find_by_data(set_t * arr, find_by_data_fn * fn, void * search)
+{
+    for (size_t i = 0; i < arr->len; i++) {
+        if (fn(search, arr->data[i].data)) {
+            return arr->data[i].key;
         }
     }
     return NULL;
@@ -89,9 +119,7 @@ set_t * set_union(set_t * s1, set_t * s2)
         set_add(res, s1->data[i].key, s1->data[i].data);
     }
     for (size_t i = 0; i < s2->len; i++) {
-        if (set_find(res, s2->data[i].key) == NULL) {
-            set_add(res, s2->data[i].key, s2->data[i].data);
-        }
+        set_add_uniq(res, s2->data[i].key, s2->data[i].data);
     }
     return res;
 }
@@ -99,9 +127,7 @@ set_t * set_union(set_t * s1, set_t * s2)
 void set_union_inplace(set_t * this, set_t * other)
 {
     for (size_t i = 0; i < other->len; i++) {
-        if (set_find(this, other->data[i].key) == NULL) {
-            set_add(this, other->data[i].key, other->data[i].data);
-        }
+        set_add_uniq(this, other->data[i].key, other->data[i].data);
     }
 }
 
@@ -113,8 +139,8 @@ set_t * set_intersection(set_t * s1, set_t * s2)
 
     set_t * res = set_init_with_capacity(min_len);
     for (size_t i = 0; i < min_len; i++) {
-        if (set_find(other_set, min_set->data[i].key) != NULL && set_find(res, min_set->data[i].key) == NULL) {
-            set_add(res, min_set->data[i].key, min_set->data[i].data);
+        if (set_find(other_set, min_set->data[i].key) != NULL) {
+            set_add_uniq(res, min_set->data[i].key, min_set->data[i].data);
         }
     }
     return res;

@@ -1,2 +1,3 @@
 nfa-conv
 *.o
+.gdb_history

@@ -15,6 +15,8 @@ typedef struct fa
 
 char * single_char_str(char c);
 fa_t * fa_init();
+fa_t * fa_from_file(FILE * fp);
+void fa_to_file(fa_t * fa, FILE * fp);
 void fa_set_initial(fa_t * fa, const char * state);
 void fa_add_accepted(fa_t * fa, const char * state);
 void fa_add_transition(fa_t * fa, const char * from, char c, const char * to);

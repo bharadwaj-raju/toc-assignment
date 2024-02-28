@@ -1,6 +1,8 @@
 #ifndef SET_H
 #define SET_H
 
+#include <stdbool.h>
+
 #define SET_DEFAULT_CAPACITY 10
 #define KEY_LEN 128
 
@@ -19,11 +21,16 @@ typedef struct set
     set_entry_t * data;
 } set_t;
 
+typedef bool find_by_data_fn(void *, void *);
+
 set_t * set_init_with_capacity(int capacity);
 set_t * set_init();
 void set_print(set_t * arr);
+bool set_equal(set_t * s1, set_t * s2);
 void set_resize(set_t * arr, int capacity);
 void set_add(set_t * arr, const char * key, void * data);
+void set_add_uniq(set_t * arr, const char * key, void * data);
+char * set_find_by_data(set_t * arr, find_by_data_fn * fn, void * search);
 void * set_find(set_t * arr, const char * key);
 void set_remove(set_t * arr, const char * key);
 void set_clear(set_t * arr);
