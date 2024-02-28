@@ -72,7 +72,7 @@ void fa_to_file(fa_t * fa, FILE * fp)
             set_t * char_transitions = transitions->data[j].data;
             for (size_t k = 0; k < char_transitions->len; k++) {
                 char * to = char_transitions->data[k].key;
-                fprintf(fp, "%s (%c) -> %s\n", to, trans_char, from);
+                fprintf(fp, "%s (%c) -> %s\n", from, trans_char, to);
             }
         }
     }
