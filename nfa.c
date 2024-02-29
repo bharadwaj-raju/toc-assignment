@@ -35,15 +35,15 @@ set_t * nfa_run(fa_t * nfa, const char * input)
         char * c_str = single_char_str(c);
         for (size_t i = 0; i < reachable_states->len; i++) {
             char * state = reachable_states->data[i].key;
-            set_t * transitions = set_find(nfa->transitions, state);
-            if (!transitions) {
+            set_t * transitions_for_state = set_find(nfa->transitions, state);
+            if (!transitions_for_state) {
                 continue;
             }
-            set_t * char_transitions = set_find(transitions, c_str);
-            if (!char_transitions) {
+            set_t * transitions_for_char = set_find(transitions_for_state, c_str);
+            if (!transitions_for_char) {
                 continue;
             }
-            set_union_inplace(next_reachable, char_transitions);
+            set_union_inplace(next_reachable, transitions_for_char);
             extend_by_lambda_closure(nfa, next_reachable);
         }
         set_clear(reachable_states);
@@ -65,8 +65,10 @@ fa_t * nfa_to_dfa(fa_t * nfa)
     if (set_intersection(initial, nfa->accepted)->len != 0) {
         fa_add_accepted(dfa, "S0");
     }
-    set_t * unique_states = set_init();
-    set_add(unique_states, "S0", initial);
+
+    // each unique "stateset" in the NFA becomes one state in the DFA
+    set_t * unique_statesets = set_init();
+    set_add(unique_statesets, "S0", initial);
 
     // we need to build the set of all symbols used in the NFA
     // because we don't explicitly track the set of symbols
@@ -77,36 +79,43 @@ fa_t * nfa_to_dfa(fa_t * nfa)
         set_union_inplace(symbols, transitions);
     }
 
-    for (size_t done = 0; done < unique_states->len; done++) {
-        char * curr_stateset_name = unique_states->data[done].key;
-        set_t * curr_stateset = unique_states->data[done].data;
+    // to generate the set of all statesets that the NFA can be in
+    // we repeatedly pick a known stateset and see what stateset it leads to
+    // when we give it all possible input symbols
+    // we add that back to the set of known statesets if it is unique
+    // this process is repeated until we have done this for every stateset
+    // in this loop, unique_statesets->len keeps increasing as we discover more
+    // reaching the end of this loop means that we have exhausted all possible statesets
+    for (size_t done = 0; done < unique_statesets->len; done++) {
+        char * curr_stateset_name = unique_statesets->data[done].key;
+        set_t * curr_stateset = unique_statesets->data[done].data;
         for (size_t i = 0; i < symbols->len; i++) {
             char * trans_str = symbols->data[i].key;
             set_t * reachable_from_curr = set_init();
             for (size_t j = 0; j < curr_stateset->len; j++) {
                 char * state = curr_stateset->data[j].key;
-                set_t * transitions = set_find(nfa->transitions, state);
-                if (!transitions) {
+                set_t * transitions_for_state = set_find(nfa->transitions, state);
+                if (!transitions_for_state) {
                     continue;
                 }
-                set_t * char_transitions = set_find(transitions, trans_str);
-                if (!char_transitions) {
+                set_t * transitions_for_char = set_find(transitions_for_state, trans_str);
+                if (!transitions_for_char) {
                     continue;
                 }
-                set_union_inplace(reachable_from_curr, char_transitions);
+                set_union_inplace(reachable_from_curr, transitions_for_char);
                 extend_by_lambda_closure(nfa, reachable_from_curr);
             }
-            char * reached_stateset_name = set_find_by_data(unique_states, (find_by_data_fn *)set_equal, reachable_from_curr);
+            char * reached_stateset_name = set_find_by_data(unique_statesets, (find_by_data_fn *)set_equal, reachable_from_curr);
             if (reached_stateset_name == NULL) {
-                // new state discovered
+                // new stateset discovered
                 reached_stateset_name = malloc(sizeof(char) * KEY_LEN);
-                snprintf(reached_stateset_name, KEY_LEN, "S%d", unique_states->len);
-                set_add(unique_states, reached_stateset_name, reachable_from_curr);
+                snprintf(reached_stateset_name, KEY_LEN, "S%d", unique_statesets->len);
+                set_add(unique_statesets, reached_stateset_name, reachable_from_curr);
                 if (set_intersection(reachable_from_curr, nfa->accepted)->len != 0) {
                     fa_add_accepted(dfa, reached_stateset_name);
                 }
             } else {
-                // just an old state -- we can safely free it
+                // just an old stateset -- we can safely free it
                 set_clear(reachable_from_curr);
                 free(reachable_from_curr);
             }
