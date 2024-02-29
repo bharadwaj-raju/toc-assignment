@@ -55,6 +55,17 @@ set_t * nfa_run(fa_t * nfa, const char * input)
     return reachable_states;
 }
 
+bool nfa_accepts(fa_t * nfa, const char * input)
+{
+    set_t * final_states = nfa_run(nfa, input);
+    set_t * accepted_intersection = set_intersection(final_states, nfa->accepted);
+    bool accepts = accepted_intersection->len != 0;
+    set_clear(final_states);
+    set_clear(accepted_intersection);
+    free(final_states);
+    free(final_states);
+}
+
 fa_t * nfa_to_dfa(fa_t * nfa)
 {
     fa_t * dfa = fa_init();
