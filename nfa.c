@@ -4,6 +4,9 @@
 
 #include "nfa.h"
 
+// extends a set of states to its lambda closure
+// i.e. all the states that can be reached from states in that set
+// using only lambda transitions
 void extend_by_lambda_closure(fa_t * nfa, set_t * states)
 {
     unsigned int done = 0;
@@ -26,7 +29,7 @@ set_t * nfa_run(fa_t * nfa, const char * input)
     set_t * reachable_states = set_init();
     set_add(reachable_states, nfa->initial, &PRESENT);
     extend_by_lambda_closure(nfa, reachable_states);
-    set_t * next_states = set_init();
+    set_t * next_reachable = set_init();
     for (size_t i = 0; i < strlen(input); i++) {
         char c = input[i];
         char * c_str = single_char_str(c);
@@ -40,13 +43,13 @@ set_t * nfa_run(fa_t * nfa, const char * input)
             if (!char_transitions) {
                 continue;
             }
-            set_union_inplace(next_states, char_transitions);
-            extend_by_lambda_closure(nfa, next_states);
+            set_union_inplace(next_reachable, char_transitions);
+            extend_by_lambda_closure(nfa, next_reachable);
         }
         set_clear(reachable_states);
         free(reachable_states);
-        reachable_states = next_states;
-        next_states = set_init();
+        reachable_states = next_reachable;
+        next_reachable = set_init();
     }
 
     return reachable_states;
@@ -64,15 +67,16 @@ fa_t * nfa_to_dfa(fa_t * nfa)
     }
     set_t * unique_states = set_init();
     set_add(unique_states, "S0", initial);
+
+    // we need to build the set of all symbols used in the NFA
+    // because we don't explicitly track the set of symbols
+    // when constructing the FA
     set_t * symbols = set_init();
     for (size_t i = 0; i < nfa->transitions->len; i++) {
         set_t * transitions = nfa->transitions->data[i].data;
         set_union_inplace(symbols, transitions);
-        // for (size_t j = 0; j < transitions->len; j++) {
-        //     char * trans_char = transitions->data[j].key;
-        //     set_add_uniq(symbols, trans_char, &PRESENT);
-        // }
     }
+
     for (size_t done = 0; done < unique_states->len; done++) {
         char * curr_stateset_name = unique_states->data[done].key;
         set_t * curr_stateset = unique_states->data[done].data;

@@ -8,8 +8,11 @@ extern int PRESENT;
 typedef struct fa
 {
     char initial[KEY_LEN];
+    // set of chars
     set_t * accepted;
+    // set of from_states -> (set of symbols -> (set of to_states))
     set_t * transitions;
+    // set of from_states -> (set of to_states)
     set_t * lambda_transitions;
 } fa_t;
 
