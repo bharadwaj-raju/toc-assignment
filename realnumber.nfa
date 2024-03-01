@@ -14,6 +14,7 @@ integral_signed (8) -> integral
 integral_signed (9) -> integral
 integral (.) -> fractional
 integral_signed (.) -> fractional
+integral (E) -> exp_symbol
 fractional (0) -> fractional
 fractional (1) -> fractional
 fractional (2) -> fractional
