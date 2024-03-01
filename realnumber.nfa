@@ -12,6 +12,16 @@ integral_signed (6) -> integral
 integral_signed (7) -> integral
 integral_signed (8) -> integral
 integral_signed (9) -> integral
+integral (0) -> integral
+integral (1) -> integral
+integral (2) -> integral
+integral (3) -> integral
+integral (4) -> integral
+integral (5) -> integral
+integral (6) -> integral
+integral (7) -> integral
+integral (8) -> integral
+integral (9) -> integral
 integral (.) -> fractional
 integral_signed (.) -> fractional
 integral (E) -> exp_symbol
