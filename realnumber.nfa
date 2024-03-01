@@ -1,0 +1,42 @@
+-> init
+init (+) -> integral_signed
+init (-) -> integral_signed
+init -> integral_signed
+integral_signed (0) -> integral
+integral_signed (1) -> integral
+integral_signed (2) -> integral
+integral_signed (3) -> integral
+integral_signed (4) -> integral
+integral_signed (5) -> integral
+integral_signed (6) -> integral
+integral_signed (7) -> integral
+integral_signed (8) -> integral
+integral_signed (9) -> integral
+integral (.) -> fractional
+integral_signed (.) -> fractional
+fractional (0) -> fractional
+fractional (1) -> fractional
+fractional (2) -> fractional
+fractional (3) -> fractional
+fractional (4) -> fractional
+fractional (5) -> fractional
+fractional (6) -> fractional
+fractional (7) -> fractional
+fractional (8) -> fractional
+fractional (9) -> fractional
+fractional (E) -> exp_symbol
+exp_symbol (+) -> exp_signed
+exp_symbol (-) -> exp_signed
+exp_symbol -> exp_signed
+exp_signed (0) -> exp
+exp_signed (1) -> exp
+exp_signed (2) -> exp
+exp_signed (3) -> exp
+exp_signed (4) -> exp
+exp_signed (5) -> exp
+exp_signed (6) -> exp
+exp_signed (7) -> exp
+exp_signed (8) -> exp
+exp_signed (9) -> exp
+
+A = [integral fractional exp]

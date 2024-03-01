@@ -8,6 +8,11 @@ Bharadwaj Raju, University of Hyderabad.
 
 `nfa-conv` is a program that takes an input NFA and converts it into a DFA, and then lets you test strings against it.
 
+Some sample FAs are provided:
+  - `evenodd.dfa`: accepts if numbers of 'a' and 'b' in input are both odd or both even
+  - `zeroonetwo.nfa`: accepts strings made of any number of `0`s followed by any number of `1`s followed by any number of `2`s
+  - `realnumber.nfa`: accepts a real number, like `-.5`, `+1.5E-3`, `.1E2`, `-100` etc.
+
 ## Building and Using
 
 ```console
