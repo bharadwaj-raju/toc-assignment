@@ -5,6 +5,11 @@
 
 #include "set.h"
 
+// all set_entry_t's must have a key and a data pointer.
+// we provide this global value as something that
+// entries can point to if they just want to indicate
+// that the key is present, without needing to point
+// to any actual data.
 int PRESENT = 123;
 
 set_t * set_init_with_capacity(int capacity)
