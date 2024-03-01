@@ -21,6 +21,14 @@ set_t * set_init()
     return set_init_with_capacity(SET_DEFAULT_CAPACITY);
 }
 
+set_t * set_copy(set_t * src)
+{
+    set_t * copy = set_init_with_capacity(src->len);
+    copy->len = src->len;
+    memcpy(copy->data, src->data, sizeof(set_entry_t) * src->len);
+    return copy;
+}
+
 void set_print(set_t * arr)
 {
     printf("{ ");
@@ -91,18 +99,6 @@ char * set_find_by_data(set_t * arr, find_by_data_fn * fn, void * search)
         }
     }
     return NULL;
-}
-
-void set_remove(set_t * arr, const char * key)
-{
-    for (size_t i = 0; i < arr->len; i++) {
-        if (strncmp(arr->data[i].key, key, KEY_LEN) == 0) {
-            for (size_t j = i + 1; j < arr->len; j++) {
-                arr->data[j - 1] = arr->data[j];
-            }
-            arr->len--;
-        }
-    }
 }
 
 void set_clear(set_t * arr)

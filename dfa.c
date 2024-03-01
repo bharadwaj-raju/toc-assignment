@@ -4,22 +4,31 @@
 
 #include "dfa.h"
 
+char * dfa_step(fa_t * dfa, char * state, char c)
+{
+    set_t * transitions_for_state = set_find(dfa->transitions, state);
+    if (!transitions_for_state) {
+        fprintf(stderr, "No transitions defined for state '%s'!\n", state);
+        return NULL;
+    }
+    char * c_str = single_char_str(c);
+    set_t * next_state = set_find(transitions_for_state, c_str);
+    free(c_str);
+    if (next_state == NULL || next_state->len == 0) {
+        fprintf(stderr, "No transition for char '%c' defined for state '%s'!\n", c, state);
+        return NULL;
+    }
+    return next_state->data[0].key;
+}
+
 char * dfa_run(fa_t * dfa, const char * input)
 {
     char * state = dfa->initial;
     for (size_t i = 0; i < strlen(input); i++) {
-        char c = input[i];
-        set_t * transitions_for_state = set_find(dfa->transitions, state);
-        if (!transitions_for_state) {
-            fprintf(stderr, "No transitions defined for state '%s'!\n", state);
+        state = dfa_step(dfa, state, input[i]);
+        if (!state) {
             return NULL;
         }
-        set_t * next_state = set_find(transitions_for_state, single_char_str(c));
-        if (next_state == NULL || next_state->len == 0) {
-            fprintf(stderr, "No transition for char '%c' defined for state '%s'!\n", c, state);
-            return NULL;
-        }
-        state = next_state->data[0].key;
     }
     return state;
 }

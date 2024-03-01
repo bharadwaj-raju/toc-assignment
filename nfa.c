@@ -24,35 +24,43 @@ void extend_by_lambda_closure(fa_t * nfa, set_t * states)
     }
 }
 
+set_t * nfa_step(fa_t * nfa, set_t * state, char c)
+{
+    set_t * curr_reachable = set_copy(state);
+    extend_by_lambda_closure(nfa, curr_reachable);
+    set_t * next_reachable = set_init_with_capacity(curr_reachable->len);
+    char * c_str = single_char_str(c);
+    for (size_t i = 0; i < curr_reachable->len; i++) {
+        char * state = curr_reachable->data[i].key;
+        set_t * transitions_for_state = set_find(nfa->transitions, state);
+        if (!transitions_for_state) {
+            continue;
+        }
+        set_t * transitions_for_char = set_find(transitions_for_state, c_str);
+        if (!transitions_for_char) {
+            continue;
+        }
+        set_union_inplace(next_reachable, transitions_for_char);
+        extend_by_lambda_closure(nfa, next_reachable);
+    }
+    free(c_str);
+    set_clear(curr_reachable);
+    free(curr_reachable);
+    return next_reachable;
+}
+
 set_t * nfa_run(fa_t * nfa, const char * input)
 {
-    set_t * reachable_states = set_init();
-    set_add(reachable_states, nfa->initial, &PRESENT);
-    extend_by_lambda_closure(nfa, reachable_states);
-    set_t * next_reachable = set_init();
+    set_t * curr_reachable = set_init();
+    set_add(curr_reachable, nfa->initial, &PRESENT);
+    extend_by_lambda_closure(nfa, curr_reachable);
     for (size_t i = 0; i < strlen(input); i++) {
-        char c = input[i];
-        char * c_str = single_char_str(c);
-        for (size_t i = 0; i < reachable_states->len; i++) {
-            char * state = reachable_states->data[i].key;
-            set_t * transitions_for_state = set_find(nfa->transitions, state);
-            if (!transitions_for_state) {
-                continue;
-            }
-            set_t * transitions_for_char = set_find(transitions_for_state, c_str);
-            if (!transitions_for_char) {
-                continue;
-            }
-            set_union_inplace(next_reachable, transitions_for_char);
-            extend_by_lambda_closure(nfa, next_reachable);
-        }
-        set_clear(reachable_states);
-        free(reachable_states);
-        reachable_states = next_reachable;
-        next_reachable = set_init();
+        set_t * next_reachable = nfa_step(nfa, curr_reachable, input[i]);
+        set_clear(curr_reachable);
+        free(curr_reachable);
+        curr_reachable = next_reachable;
     }
-
-    return reachable_states;
+    return curr_reachable;
 }
 
 bool nfa_accepts(fa_t * nfa, const char * input)
@@ -63,7 +71,8 @@ bool nfa_accepts(fa_t * nfa, const char * input)
     set_clear(final_states);
     set_clear(accepted_intersection);
     free(final_states);
-    free(final_states);
+    free(accepted_intersection);
+    return accepts;
 }
 
 fa_t * nfa_to_dfa(fa_t * nfa)
