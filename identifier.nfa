@@ -1,0 +1,9 @@
+-> init
+init (\l) -> nondigit
+init (_) -> nondigit
+nondigit -> accept
+accept (\l) -> accept
+accept (_) -> accept
+accept (\d) -> accept
+
+A = [accept]

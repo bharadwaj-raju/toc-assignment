@@ -12,6 +12,7 @@ Some sample FAs are provided:
   - `evenodd.dfa`: accepts if numbers of 'a' and 'b' in input are both odd or both even
   - `zeroonetwo.nfa`: accepts strings made of any number of `0`s followed by any number of `1`s followed by any number of `2`s
   - `realnumber.nfa`: accepts a real number, like `-.5`, `+1.5E-3`, `.1E2`, `-100` etc.
+  - `indentifier.nfa`: accepts valid C identifiers, i.e. matching regex `(l + _)(l + d + _)*`
 
 ## Building and Using
 
@@ -28,6 +29,10 @@ File format:
 state1 (c) -> state2
 # lambda transition from state1 to state2
 state1 -> state2
+# shortcut to define transition on all digits (0-9)
+state1 (\d) -> state2
+# shortcut to define transition on all letters (a-z and A-Z)
+state1 (\l) -> state2
 # list accepted states
 A = [state1 state2 stateN]
 ```

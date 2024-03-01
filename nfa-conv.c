@@ -18,6 +18,10 @@ int main(int argc, char const * argv[])
         printf("state1 (c) -> state2\n");
         printf("# lambda transition from state1 to state2\n");
         printf("state1 -> state2\n");
+        printf("# shortcut to define transition on all digits (0-9)\n");
+        printf("state1 (\\d) -> state2\n");
+        printf("# shortcut to define transition on all letters (a-z and A-Z)\n");
+        printf("state1 (\\l) -> state2\n");
         printf("# list accepted states\n");
         printf("A = [state1 state2 stateN]\n");
         return 1;

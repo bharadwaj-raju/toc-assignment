@@ -43,6 +43,17 @@ fa_t * fa_from_file(FILE * fp)
             fa_set_initial(fa, state1);
         } else if (sscanf(buf_trim, "%s -> %s", state1, state2) == 2) {
             fa_add_lambda_transition(fa, state1, state2);
+        } else if (sscanf(buf_trim, "%s (\\d) -> %s", state1, state2) == 2) {
+            for (char trans = '0'; trans <= '9'; trans++) {
+                fa_add_transition(fa, state1, trans, state2);
+            }
+        } else if (sscanf(buf_trim, "%s (\\l) -> %s", state1, state2) == 2) {
+            for (char trans = 'a'; trans <= 'z'; trans++) {
+                fa_add_transition(fa, state1, trans, state2);
+            }
+            for (char trans = 'A'; trans <= 'Z'; trans++) {
+                fa_add_transition(fa, state1, trans, state2);
+            }
         } else if (sscanf(buf_trim, "%s (%c) -> %s", state1, &trans, state2) == 3) {
             fa_add_transition(fa, state1, trans, state2);
         } else if (strncmp("A = ", buf_trim, 4) == 0) {
