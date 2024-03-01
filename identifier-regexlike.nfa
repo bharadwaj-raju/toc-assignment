@@ -1,0 +1,17 @@
+-> init
+init -> try_l
+init -> try_u
+try_l (\l) -> l_matched
+try_u (_) -> u_matched
+l_matched -> l+u_matched
+u_matched -> l+u_matched
+l+u_matched -> try_l_2
+l+u_matched -> try_u_2
+l+u_matched -> try_d
+try_l_2 (\l) -> l+u+d_matched
+try_u_2 (_) -> l+u+d_matched
+try_d (\d) -> l+u+d_matched
+l+u+d_matched -> l+u_matched
+l+u_matched -> l+d+u_matched
+
+A = [l+d+u_matched]

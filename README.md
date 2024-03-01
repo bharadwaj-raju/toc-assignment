@@ -12,7 +12,8 @@ Some sample FAs are provided:
   - `evenodd.dfa`: accepts if numbers of 'a' and 'b' in input are both odd or both even
   - `zeroonetwo.nfa`: accepts strings made of any number of `0`s followed by any number of `1`s followed by any number of `2`s
   - `realnumber.nfa`: accepts a real number, like `-.5`, `+1.5E-3`, `.1E2`, `-100` etc.
-  - `indentifier.nfa`: accepts valid C identifiers, i.e. matching regex `(l + _)(l + d + _)*`
+  - `identifier.nfa`: accepts valid C identifiers, i.e. matching regex `(l + _)(l + d + _)*`
+  - `identifier-regexlike.nfa`: like `identifier.nfa`, but written as if it was mechanically converted to an NFA-λ from the regex. involves more states.
 
 ## Building and Using
 
