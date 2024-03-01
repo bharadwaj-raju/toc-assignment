@@ -108,18 +108,6 @@ void set_clear(set_t * arr)
     arr->data = malloc(sizeof(set_entry_t) * arr->capacity);
 }
 
-set_t * set_union(set_t * s1, set_t * s2)
-{
-    set_t * res = set_init_with_capacity(s1->len + s2->len);
-    for (size_t i = 0; i < s1->len; i++) {
-        set_add(res, s1->data[i].key, s1->data[i].data);
-    }
-    for (size_t i = 0; i < s2->len; i++) {
-        set_add_uniq(res, s2->data[i].key, s2->data[i].data);
-    }
-    return res;
-}
-
 void set_union_inplace(set_t * this, set_t * other)
 {
     for (size_t i = 0; i < other->len; i++) {
