@@ -61,10 +61,14 @@ int main(int argc, char const * argv[])
         free(nfa_state);
 
         printf("dfa:\n");
+        fprintf(stderr, "\t");  // so that DFA error message, if any, prints with a tab
         char * dfa_state = dfa_run(dfa, input);
-        bool dfa_accepted = set_find(dfa->accepted, dfa_state) != NULL;
-        printf("\tfinal state: %s\n", dfa_state);
-        printf("\taccepted: %s\n", dfa_accepted ? "yes" : "no");
+        if (dfa_state) {
+            fprintf(stderr, "\b");
+            bool dfa_accepted = set_find(dfa->accepted, dfa_state) != NULL;
+            printf("\tfinal state: %s\n", dfa_state);
+            printf("\taccepted: %s\n", dfa_accepted ? "yes" : "no");
+        }
     }
 
     return 0;
