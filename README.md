@@ -11,7 +11,7 @@ Bharadwaj Raju, University of Hyderabad.
 ## Building and Using
 
 ```console
-$ make nfa-conv
+$ make
 $ ./nfa-conv
 Usage: ./nfa-conv <file>
 
