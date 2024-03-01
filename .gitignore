@@ -2,3 +2,5 @@ nfa-conv
 *.o
 .gdb_history
 ./nfa-conv
+build/
+.vscode/
