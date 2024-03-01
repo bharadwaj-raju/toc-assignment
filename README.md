@@ -1,12 +1,12 @@
-# NFA to DFA conversion
+# NFA-λ to DFA conversion
 
 Bharadwaj Raju, University of Hyderabad.
 
 ## Structure
 
-`fa.h`, `dfa.h`, `nfa.h` provide structures and functions for creating, running, and converting between NFAs and DFAs. `set.h` provides an array-based set structure which can map string keys to arbitrary values.
+`fa.h`, `dfa.h`, `nfa.h` provide structures and functions for creating, running, and converting between NFA-λs and DFAs. `set.h` provides an array-based set structure which can map string keys to arbitrary values.
 
-`nfa-conv` is a program that takes an input NFA and converts it into a DFA, and then lets you test strings against it.
+`nfa-conv` is a program that takes an input NFA-λ and converts it into a DFA, and then lets you test strings against it.
 
 Some sample FAs are provided:
   - `evenodd.dfa`: accepts if numbers of 'a' and 'b' in input are both odd or both even
