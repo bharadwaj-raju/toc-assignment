@@ -16,7 +16,6 @@ typedef struct fa
     set_t * lambda_transitions;
 } fa_t;
 
-char * single_char_str(char c);
 fa_t * fa_init();
 fa_t * fa_from_file(FILE * fp);
 void fa_to_file(fa_t * fa, FILE * fp);

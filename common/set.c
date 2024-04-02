@@ -12,6 +12,14 @@
 // to any actual data.
 int PRESENT = 123;
 
+char * single_char_str(char c)
+{
+    char * str = (char *)malloc(sizeof(char) * 2);
+    str[0] = c;
+    str[1] = '\0';
+    return str;
+}
+
 set_t * set_init_with_capacity(int capacity)
 {
     set_t * arr = malloc(sizeof(set_t));
@@ -106,6 +114,15 @@ char * set_find_by_data(set_t * arr, find_by_data_fn * fn, void * search)
     return NULL;
 }
 
+void set_set(set_t * arr, const char * key, void * data)
+{
+    for (size_t i = 0; i < arr->len; i++) {
+        if (strncmp(arr->data[i].key, key, KEY_LEN) == 0) {
+            arr->data[i].data = data;
+        }
+    }
+}
+
 void set_clear(set_t * arr)
 {
     arr->len = 0;
@@ -113,8 +130,17 @@ void set_clear(set_t * arr)
     arr->data = malloc(sizeof(set_entry_t) * arr->capacity);
 }
 
+void set_free(set_t * arr)
+{
+    free(arr->data);
+    free(arr);
+}
+
 void set_union_inplace(set_t * this, set_t * other)
 {
+    if (!other) {
+        return;
+    }
     for (size_t i = 0; i < other->len; i++) {
         set_add_uniq(this, other->data[i].key, other->data[i].data);
     }

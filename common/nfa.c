@@ -44,8 +44,7 @@ set_t * nfa_step(fa_t * nfa, set_t * state, char c)
         extend_by_lambda_closure(nfa, next_reachable);
     }
     free(c_str);
-    set_clear(curr_reachable);
-    free(curr_reachable);
+    set_free(curr_reachable);
     return next_reachable;
 }
 
@@ -56,8 +55,7 @@ set_t * nfa_run(fa_t * nfa, const char * input)
     extend_by_lambda_closure(nfa, curr_reachable);
     for (size_t i = 0; i < strlen(input); i++) {
         set_t * next_reachable = nfa_step(nfa, curr_reachable, input[i]);
-        set_clear(curr_reachable);
-        free(curr_reachable);
+        set_free(curr_reachable);
         curr_reachable = next_reachable;
     }
     return curr_reachable;
@@ -68,10 +66,8 @@ bool nfa_accepts(fa_t * nfa, const char * input)
     set_t * final_states = nfa_run(nfa, input);
     set_t * accepted_intersection = set_intersection(final_states, nfa->accepted);
     bool accepts = accepted_intersection->len != 0;
-    set_clear(final_states);
-    set_clear(accepted_intersection);
-    free(final_states);
-    free(accepted_intersection);
+    set_free(final_states);
+    set_free(accepted_intersection);
     return accepts;
 }
 
@@ -136,8 +132,7 @@ fa_t * nfa_to_dfa(fa_t * nfa)
                 }
             } else {
                 // just an old stateset -- we can safely free it
-                set_clear(reachable_from_curr);
-                free(reachable_from_curr);
+                set_free(reachable_from_curr);
             }
             fa_add_transition(dfa, curr_stateset_name, trans_str[0], reached_stateset_name);
         }

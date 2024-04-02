@@ -5,14 +5,6 @@
 
 #include "fa.h"
 
-char * single_char_str(char c)
-{
-    char * str = (char *)malloc(sizeof(char) * 2);
-    str[0] = c;
-    str[1] = '\0';
-    return str;
-}
-
 fa_t * fa_init()
 {
     fa_t * fa = malloc(sizeof(fa_t));
@@ -92,7 +84,7 @@ void fa_to_file(fa_t * fa, FILE * fp)
         set_t * transitions = fa->lambda_transitions->data[i].data;
         for (size_t j = 0; j < transitions->len; j++) {
             char * to = transitions->data[j].key;
-            fprintf(fp, "%s -> %s\n", to, from);
+            fprintf(fp, "%s -> %s\n", from, to);
         }
     }
     fprintf(fp, "A = [");

@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dfa.h"
-#include "fa.h"
-#include "nfa.h"
+#include "../common/dfa.h"
+#include "../common/fa.h"
+#include "../common/nfa.h"
 
 int main(int argc, char const * argv[])
 {
