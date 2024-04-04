@@ -9,9 +9,10 @@ Bharadwaj Raju, University of Hyderabad
 `pda-run` is a program that takes an input PDA and lets you test strings against it.
 
 Some sample PDAs are provided:
-  - `anbn.pda`: accepts a^nb^n
-  - `anbmambn.pda`: accepts a^nb^ma^mb^n
-  - `anbmanplusm.pda`: accepts a^nb^ma^(n+m)
+  - `anbn.pda`: accepts a<sup>n</sup>b<sup>n</sup>
+  - `anbmambn.pda`: accepts a<sup>n</sup>b<sup>m</sup>a<sup>m</sup>b<sup>n</sup>
+  - `anbmanplusm.pda`: accepts a<sup>n</sup>b<sup>m</sup>a<sup>n+m</sup>
+  - `aibjck.pda`: accepts a<sup>i</sup>b<sup>j</sup>c<sup>k</sup> such that i, j, k ≥ 0 and i = j or i = k
 
 ## Building and Using
 

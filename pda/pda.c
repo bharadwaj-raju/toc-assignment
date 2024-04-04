@@ -174,7 +174,6 @@ bool pda_recognize(pda_t * pda, const char * input)
             }
             pda_branch(pda, next_branches, branch, inputc, EPSILON);
             pda_branch(pda, next_branches, branch, EPSILON, EPSILON);
-            stack_free(branch->stack);
         }
         set_free(branches);
         branches = next_branches;
