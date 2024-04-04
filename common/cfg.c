@@ -23,7 +23,7 @@ cfg_t * cfg_from_file(FILE * fp)
         while (isspace(buf_trim[0])) {
             buf_trim++;
         }
-        if (buf_trim[0] == '#') {
+        if (buf_trim[0] == '#' || buf_trim[0] == '\0') {
             continue;
         }
         char variable[KEY_LEN];
@@ -34,8 +34,10 @@ cfg_t * cfg_from_file(FILE * fp)
             // lambda production
             cfg_add_production(cfg, variable, "");
         } else {
-            fprintf(stderr, "could not parse line %d\n", lineno);
+            fprintf(stderr, "could not parse line %d: '%s'\n", lineno, buf_trim);
+            return NULL;
         }
+        lineno++;
     }
     cfg_set_start_variable(cfg, cfg->productions->data[0].key);
     return cfg;

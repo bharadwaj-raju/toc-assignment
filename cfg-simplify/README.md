@@ -1,4 +1,4 @@
-# Context-Free Grammars: Simplification and Conversion to Chomsky Normal Form
+# Simplification of Context-Free Grammar
 
 Bharadwaj Raju, University of Hyderabad.
 
@@ -6,7 +6,7 @@ Bharadwaj Raju, University of Hyderabad.
 
 `cfg.h` provide structures and functions for creating and purifying CFGs.
 
-`cfg-simplify` is a program that takes an input CFG and purifies it, then converts it into CNF.
+`cfg-simplify` is a program that takes an input CFG and purifies it.
 
 Some sample CFGs are provided.
 

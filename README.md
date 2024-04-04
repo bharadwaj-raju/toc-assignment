@@ -5,4 +5,4 @@ Bharadwaj Raju, University of Hyderabad
 ## Parts
 
   - [NFA-λ to DFA conversion](./nfa-conv/)
-  - [Context-Free Grammars: Simplification and Conversion to Chomsky Normal Form](./cfg-simplify/)
+  - [Simplification of Context-Free Grammar](./cfg-simplify/)

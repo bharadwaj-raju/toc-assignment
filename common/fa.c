@@ -25,7 +25,7 @@ fa_t * fa_from_file(FILE * fp)
         while (isspace(buf_trim[0])) {
             buf_trim++;
         }
-        if (buf_trim[0] == '#') {
+        if (buf_trim[0] == '#' || buf_trim[0] == '\0') {
             continue;
         }
         char state1[128];
@@ -59,7 +59,11 @@ fa_t * fa_from_file(FILE * fp)
             while ((accepted_state = strtok_r(rest, " ,", &rest))) {
                 fa_add_accepted(fa, accepted_state);
             }
+        } else {
+            fprintf(stderr, "could not parse line %d: '%s'\n", lineno, buf_trim);
+            return NULL;
         }
+        lineno++;
     }
     return fa;
 }
