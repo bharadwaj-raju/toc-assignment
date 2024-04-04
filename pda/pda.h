@@ -32,7 +32,7 @@ void pda_to_file(pda_t * pda, FILE * fp);
 void pda_set_initial(pda_t * pda, const char * initial);
 void pda_add_accepted(pda_t * pda, const char * accepted);
 void pda_add_transition(pda_t * pda, const char * from_state, char inputc, char stackc, const char * to_state, char to_stackc);
-bool pda_recognize(pda_t * pda, const char * input);
+bool pda_recognize(pda_t * pda, const char * input, bool verbose);
 
 pda_branch_t * pda_branch_create(const char * state, size_t input_pos, stack_t * stack);
 

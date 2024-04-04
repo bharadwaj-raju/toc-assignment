@@ -6,7 +6,7 @@ Bharadwaj Raju, University of Hyderabad
 
 `pda.h` provides structures and functions for creating and running PDAs. `stack.h` provides an array-based stack structure.
 
-`pda-run` is a program that takes an input PDA and lets you test strings against it.
+`pda-run` is a program that takes an input PDA and lets you test strings against it. You can use the option `--verbose`/`-v` to make it print the exact process of the PDA.
 
 Some sample PDAs are provided:
   - `anbn.pda`: accepts a<sup>n</sup>b<sup>n</sup>
@@ -19,7 +19,7 @@ Some sample PDAs are provided:
 ```console
 $ make
 $ ./pda-run
-Usage: ./pda-run <file>
+Usage: ./pda-run <file> [--verbose/-v]
 
 File format:
 

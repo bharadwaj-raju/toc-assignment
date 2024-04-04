@@ -18,6 +18,14 @@ int main(int argc, char const * argv[])
         return 1;
     }
 
+    bool verbose = false;
+
+    if (argc == 3) {
+        if (strncmp(argv[2], "--verbose", 9) == 0 || strncmp(argv[2], "-v", 2) == 0) {
+            verbose = true;
+        }
+    }
+
     const char * fname = argv[1];
     FILE * fp = fopen(fname, "r");
     pda_t * pda = pda_from_file(fp);
@@ -39,7 +47,7 @@ int main(int argc, char const * argv[])
         if (newline != NULL) {
             *newline = '\0';
         }
-        bool accepted = pda_recognize(pda, input);
+        bool accepted = pda_recognize(pda, input, verbose);
         printf("%s\n", accepted ? "accepted" : "rejected");
     }
 

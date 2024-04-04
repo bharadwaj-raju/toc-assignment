@@ -115,23 +115,32 @@ pda_branch_t * pda_branch_create(const char * state, size_t input_pos, stack_t *
     return branch;
 }
 
-void pda_branch(pda_t * pda, set_t * next_branches, pda_branch_t * branch, char inputc, char stackc)
+#define log(msg, ...) \
+    if (verbose)      \
+    fprintf(stdout, msg, ##__VA_ARGS__)
+
+void pda_branch(pda_t * pda, set_t * next_branches, pda_branch_t * branch, char inputc, char stackc, bool verbose)
 {
     char * lhs = malloc(sizeof(char) * KEY_LEN + 6);
     snprintf(lhs, KEY_LEN + 6, "%s (%c/%c)", branch->state, inputc, stackc);
     set_t * transitions_for = set_find(pda->transitions, lhs);
-    stack_t * stack = stack_copy(branch->stack);
-    if (stackc != EPSILON) {
-        stack_pop(stack);
-    }
+
     if (transitions_for && transitions_for->len > 0) {
         for (size_t j = 0; j < transitions_for->len; j++) {
+            stack_t * stack = stack_copy(branch->stack);
+            if (stackc != EPSILON) {
+                stack_pop(stack);
+            }
             char * rhs = transitions_for->data[j].key;
             char * to_state = malloc(sizeof(char) * KEY_LEN);
             char next_stackc;
             sscanf(rhs, "%s (%c)", to_state, &next_stackc);
+            log("  %s -> %s ", lhs, to_state);
             if (next_stackc != EPSILON) {
+                log("push '%c'\n", next_stackc);
                 stack_push(stack, next_stackc);
+            } else {
+                log("\n");
             }
             int input_pos = branch->input_pos;
             if (inputc != EPSILON) {
@@ -143,7 +152,7 @@ void pda_branch(pda_t * pda, set_t * next_branches, pda_branch_t * branch, char 
     free(lhs);
 }
 
-bool pda_recognize(pda_t * pda, const char * input)
+bool pda_recognize(pda_t * pda, const char * input, bool verbose)
 {
     set_t * branches = set_init();
     set_add(branches, "0", pda_branch_create(pda->initial, 0, NULL));
@@ -154,27 +163,33 @@ bool pda_recognize(pda_t * pda, const char * input)
         set_t * next_branches = set_init();
         for (size_t i = 0; i < branches->len; i++) {
             pda_branch_t * branch = branches->data[i].data;
+            log("--branch %lu-- ", i);
             char inputc;
             if (branch->input_pos >= input_len) {
                 if (set_find(pda->accepted, branch->state) != NULL) {
+                    log("accepted at %s\n", branch->state);
                     stack_free(branch->stack);
                     set_free(branches);
                     set_free(next_branches);
-                    printf("steps: %lu\n", steps);
+                    log("steps: %lu\n", steps);
                     return true;
                 }
                 inputc = EPSILON;
             } else {
                 inputc = input[branch->input_pos];
             }
+            log("state = %s inputpos = %lu inputc = '%c' ", branch->state, branch->input_pos, inputc);
+            if (verbose)
+                stack_print(branch->stack);
             char stackc = stack_peek(branch->stack);
             if (stackc != '\0') {
-                pda_branch(pda, next_branches, branch, inputc, stackc);
-                pda_branch(pda, next_branches, branch, EPSILON, stackc);
+                pda_branch(pda, next_branches, branch, inputc, stackc, verbose);
+                pda_branch(pda, next_branches, branch, EPSILON, stackc, verbose);
             }
-            pda_branch(pda, next_branches, branch, inputc, EPSILON);
-            pda_branch(pda, next_branches, branch, EPSILON, EPSILON);
+            pda_branch(pda, next_branches, branch, inputc, EPSILON, verbose);
+            pda_branch(pda, next_branches, branch, EPSILON, EPSILON, verbose);
         }
+        log("\n---------------------------\n\n");
         set_free(branches);
         branches = next_branches;
         next_branches = set_init();
