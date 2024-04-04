@@ -6,3 +6,4 @@ Bharadwaj Raju, University of Hyderabad
 
   - [NFA-λ to DFA conversion](./nfa-conv/)
   - [Simplification of Context-Free Grammar](./cfg-simplify/)
+  - [Pushdown Automata](./pda/)
