@@ -6,13 +6,15 @@ Bharadwaj Raju, University of Hyderabad
 
 `pda.h` provides structures and functions for creating and running PDAs. `stack.h` provides an array-based stack structure.
 
-`pda-run` is a program that takes an input PDA and lets you test strings against it. You can use the option `--verbose`/`-v` to make it print the exact process of the PDA.
+`pda-run` is a program that takes an input PDA and lets you test strings against it. The option `--verbose`/`-v` can be used to make it print the exact working process of the PDA.
 
 Some sample PDAs are provided:
   - `anbn.pda`: accepts a<sup>n</sup>b<sup>n</sup>
   - `anbmambn.pda`: accepts a<sup>n</sup>b<sup>m</sup>a<sup>m</sup>b<sup>n</sup>
   - `anbmanplusm.pda`: accepts a<sup>n</sup>b<sup>m</sup>a<sup>n+m</sup>
   - `aibjck.pda`: accepts a<sup>i</sup>b<sup>j</sup>c<sup>k</sup> such that i, j, k ≥ 0 and i = j or i = k
+  - `palindrome.pda`: accepts palindromes made of 0 and 1
+  - `equal.pda`: accepts { s ∈ {a, b}<sup>*</sup> | n<sub>a</sub>(s) = n<sub>b</sub>(s) }
 
 ## Building and Using
 

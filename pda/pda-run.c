@@ -6,7 +6,7 @@
 int main(int argc, char const * argv[])
 {
     if (argc < 2) {
-        printf("Usage: %s <file>\n", argv[0]);
+        printf("Usage: %s <file> [--verbose/-v]\n", argv[0]);
         printf("\nFile format:\n\n");
         printf("# initial state\n");
         printf("-> q1\n");

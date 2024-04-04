@@ -1,0 +1,16 @@
+# { s ∈ {a,b}* | n_a(s) = n_b(s) }
+-> init
+init ( / ) -> main ($)
+main (a/b) -> main ( )
+main (b/a) -> main ( )
+main (a/$) -> pusha ($)
+pusha ( / ) -> main (a)
+main (b/$) -> pushb ($)
+pushb ( / ) -> main (b)
+main (a/a) -> pushaa (a)
+pushaa ( / ) -> main (a)
+main (b/b) -> pushbb (b)
+pushbb ( / ) -> main (b)
+main ( /$) -> final ( )
+
+A = [final]
