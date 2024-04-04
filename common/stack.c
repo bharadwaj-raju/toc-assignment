@@ -28,13 +28,13 @@ stack_t * stack_copy(stack_t * other)
     return st;
 }
 
-void stack_print(stack_t * st)
+void stack_print(stack_t * st, FILE * fp)
 {
     printf("[ ");
     for (size_t i = 0; i < st->len; i++) {
-        printf("%c ", st->data[i]);
+        fprintf(fp, "%c ", st->data[i]);
     }
-    printf("]\n");
+    printf("]");
 }
 
 void stack_resize(stack_t * st, int capacity)

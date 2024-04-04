@@ -179,8 +179,10 @@ bool pda_recognize(pda_t * pda, const char * input, bool verbose)
                 inputc = input[branch->input_pos];
             }
             log("state = %s inputpos = %lu inputc = '%c' ", branch->state, branch->input_pos, inputc);
-            if (verbose)
-                stack_print(branch->stack);
+            if (verbose) {
+                stack_print(branch->stack, stderr);
+                fprintf(stderr, "\n");
+            }
             char stackc = stack_peek(branch->stack);
             if (stackc != '\0') {
                 pda_branch(pda, next_branches, branch, inputc, stackc, verbose);
@@ -194,7 +196,7 @@ bool pda_recognize(pda_t * pda, const char * input, bool verbose)
         branches = next_branches;
         next_branches = set_init();
         if (branches->len == 0) {
-            printf("steps: %lu\n", steps);
+            log("steps: %lu\n", steps);
             break;
         }
     }
