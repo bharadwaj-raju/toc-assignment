@@ -10,7 +10,7 @@
 int main(int argc, char const * argv[])
 {
     if (argc < 2) {
-        printf("Usage: %s <file>\n", argv[0]);
+        printf("Usage: %s <file> [--verbose/-v]\n", argv[0]);
         printf("\nFile format:\n\n");
         printf("# indicate initial state\n");
         printf("-> state0\n");
@@ -25,6 +25,16 @@ int main(int argc, char const * argv[])
         printf("# list accepted states\n");
         printf("A = [state1 state2 stateN]\n");
         return 1;
+    }
+
+    nfa_set_verbose(false);
+    dfa_set_verbose(false);
+
+    if (argc == 3) {
+        if (strncmp(argv[2], "--verbose", 9) == 0 || strncmp(argv[2], "-v", 2) == 0) {
+            nfa_set_verbose(true);
+            dfa_set_verbose(true);
+        }
     }
 
     const char * fname = argv[1];
@@ -56,6 +66,7 @@ int main(int argc, char const * argv[])
         printf("nfa:\n");
         printf("\tfinal state: ");
         set_print(nfa_state);
+        printf("\n");
         set_t * accepted_intersection = set_intersection(fa->accepted, nfa_state);
         bool nfa_accepted = accepted_intersection->len != 0;
         set_clear(accepted_intersection);

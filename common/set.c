@@ -48,7 +48,7 @@ void set_print(set_t * arr)
     for (size_t i = 0; i < arr->len; i++) {
         printf("%s ", arr->data[i].key);
     }
-    printf("}\n");
+    printf("}");
 }
 
 bool set_equal(set_t * s1, set_t * s2)

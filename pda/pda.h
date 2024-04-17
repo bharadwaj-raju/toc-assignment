@@ -26,13 +26,14 @@ typedef struct pda_branch
     size_t input_pos;
 } pda_branch_t;
 
+void pda_set_verbose(bool v);
 pda_t * pda_init();
 pda_t * pda_from_file(FILE * fp);
 void pda_to_file(pda_t * pda, FILE * fp);
 void pda_set_initial(pda_t * pda, const char * initial);
 void pda_add_accepted(pda_t * pda, const char * accepted);
 void pda_add_transition(pda_t * pda, const char * from_state, char inputc, char stackc, const char * to_state, char to_stackc);
-bool pda_recognize(pda_t * pda, const char * input, bool verbose);
+bool pda_recognize(pda_t * pda, const char * input);
 
 pda_branch_t * pda_branch_create(const char * state, size_t input_pos, stack_t * stack);
 

@@ -6,7 +6,7 @@ Bharadwaj Raju, University of Hyderabad.
 
 `fa.h`, `dfa.h`, `nfa.h` provide structures and functions for creating, running, and converting between NFA-λs and DFAs. `set.h` provides an array-based set structure which can map string keys to arbitrary values.
 
-`nfa-conv` is a program that takes an input NFA-λ and converts it into a DFA, and then lets you test strings against it.
+`nfa-conv` is a program that takes an input NFA-λ and converts it into a DFA, and then lets you test strings against it.  The option `--verbose`/`-v` can be used to make it print the exact working process.
 
 Some sample FAs are provided:
   - `evenodd.dfa`: accepts if numbers of 'a' and 'b' in input are both odd or both even
@@ -20,7 +20,7 @@ Some sample FAs are provided:
 ```console
 $ make
 $ ./nfa-conv
-Usage: ./nfa-conv <file>
+Usage: ./nfa-conv <file> [--verbose/-v]
 
 File format:
 

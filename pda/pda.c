@@ -7,6 +7,17 @@
 #include "../common/stack.h"
 #include "pda.h"
 
+static bool verbose = false;
+
+void pda_set_verbose(bool v)
+{
+    verbose = v;
+}
+
+#define log(msg, ...) \
+    if (verbose)      \
+    fprintf(stdout, msg, ##__VA_ARGS__)
+
 pda_t * pda_init()
 {
     pda_t * pda = malloc(sizeof(pda_t));
@@ -115,10 +126,6 @@ pda_branch_t * pda_branch_create(const char * state, size_t input_pos, stack_t *
     return branch;
 }
 
-#define log(msg, ...) \
-    if (verbose)      \
-    fprintf(stdout, msg, ##__VA_ARGS__)
-
 void pda_branch(pda_t * pda, set_t * next_branches, pda_branch_t * branch, char inputc, char stackc, bool verbose)
 {
     char * lhs = malloc(sizeof(char) * KEY_LEN + 6);
@@ -152,7 +159,7 @@ void pda_branch(pda_t * pda, set_t * next_branches, pda_branch_t * branch, char 
     free(lhs);
 }
 
-bool pda_recognize(pda_t * pda, const char * input, bool verbose)
+bool pda_recognize(pda_t * pda, const char * input)
 {
     set_t * branches = set_init();
     set_add(branches, "0", pda_branch_create(pda->initial, 0, NULL));

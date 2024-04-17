@@ -4,6 +4,17 @@
 
 #include "nfa.h"
 
+static bool verbose = false;
+
+void nfa_set_verbose(bool v)
+{
+    verbose = v;
+}
+
+#define log(msg, ...) \
+    if (verbose)      \
+    fprintf(stdout, msg, ##__VA_ARGS__)
+
 // extends a set of states to its lambda closure
 // i.e. all the states that can be reached from states in that set
 // using only lambda transitions
@@ -28,6 +39,15 @@ set_t * nfa_step(fa_t * nfa, set_t * state, char c)
 {
     set_t * curr_reachable = set_copy(state);
     extend_by_lambda_closure(nfa, curr_reachable);
+
+    if (verbose) {
+        log("λ(");
+        set_print(state);
+        log(") = ");
+        set_print(curr_reachable);
+        log("\n");
+    }
+
     set_t * next_reachable = set_init_with_capacity(curr_reachable->len);
     char * c_str = single_char_str(c);
     for (size_t i = 0; i < curr_reachable->len; i++) {
@@ -41,7 +61,17 @@ set_t * nfa_step(fa_t * nfa, set_t * state, char c)
             continue;
         }
         set_union_inplace(next_reachable, transitions_for_char);
+        if (verbose) {
+            log("  transitions on %c = ", c);
+            set_print(next_reachable);
+            log("\n");
+        }
         extend_by_lambda_closure(nfa, next_reachable);
+        if (verbose) {
+            log("  λ(transitions on %c) = ", c);
+            set_print(next_reachable);
+            log("\n");
+        }
     }
     free(c_str);
     set_free(curr_reachable);
@@ -77,8 +107,14 @@ fa_t * nfa_to_dfa(fa_t * nfa)
     set_t * initial = set_init();
     set_add(initial, nfa->initial, &PRESENT);
     extend_by_lambda_closure(nfa, initial);
+    if (verbose) {
+        log("λ(initial state) = S0 = ");
+        set_print(initial);
+        log("\n");
+    }
     fa_set_initial(dfa, "S0");
     if (set_intersection(initial, nfa->accepted)->len != 0) {
+        log("S0 is an acceptance state\n");
         fa_add_accepted(dfa, "S0");
     }
 
@@ -126,6 +162,11 @@ fa_t * nfa_to_dfa(fa_t * nfa)
                 // new stateset discovered
                 reached_stateset_name = malloc(sizeof(char) * KEY_LEN);
                 snprintf(reached_stateset_name, KEY_LEN, "S%d", unique_statesets->len);
+                if (verbose) {
+                    log("found new state %s = ", reached_stateset_name);
+                    set_print(reachable_from_curr);
+                    log("\n");
+                }
                 set_add(unique_statesets, reached_stateset_name, reachable_from_curr);
                 if (set_intersection(reachable_from_curr, nfa->accepted)->len != 0) {
                     fa_add_accepted(dfa, reached_stateset_name);
@@ -134,6 +175,7 @@ fa_t * nfa_to_dfa(fa_t * nfa)
                 // just an old stateset -- we can safely free it
                 set_free(reachable_from_curr);
             }
+            log("%s transition on %c to %s\n", curr_stateset_name, trans_str[0], reached_stateset_name);
             fa_add_transition(dfa, curr_stateset_name, trans_str[0], reached_stateset_name);
         }
     }

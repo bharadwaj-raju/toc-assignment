@@ -5,6 +5,7 @@
 
 extern int PRESENT;
 
+void nfa_set_verbose(bool v);
 set_t * nfa_step(fa_t * nfa, set_t * state, char c);
 set_t * nfa_run(fa_t * nfa, const char * input);
 bool nfa_accepts(fa_t * nfa, const char * input);

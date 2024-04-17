@@ -18,11 +18,11 @@ int main(int argc, char const * argv[])
         return 1;
     }
 
-    bool verbose = false;
+    pda_set_verbose(false);
 
     if (argc == 3) {
         if (strncmp(argv[2], "--verbose", 9) == 0 || strncmp(argv[2], "-v", 2) == 0) {
-            verbose = true;
+            pda_set_verbose(true);
         }
     }
 
@@ -47,7 +47,7 @@ int main(int argc, char const * argv[])
         if (newline != NULL) {
             *newline = '\0';
         }
-        bool accepted = pda_recognize(pda, input, verbose);
+        bool accepted = pda_recognize(pda, input);
         printf("%s\n", accepted ? "accepted" : "rejected");
     }
 
